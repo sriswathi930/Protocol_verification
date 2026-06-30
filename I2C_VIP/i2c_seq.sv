@@ -1,6 +1,6 @@
 // random sequence generation for 16times because data depth is 16.
 
-class i2c_seq extends uvm_sequence#(i2c_seq_item);
+class i2c_seq extends uvm_sequence#(seq_item);
   `uvm_object_utils(i2c_seq)
 
   function new(string name ="i2c_master");
@@ -8,10 +8,9 @@ class i2c_seq extends uvm_sequence#(i2c_seq_item);
   endfunction
 
   task body();
-    i2c_seq_item seq;
+    seq_item seq;
     repeat(16) begin
-      seq=i2c_seq
-      _item::type_id::create("seq");
+      seq=seq_item::type_id::create("seq");
       start_item(seq);
       assert(seq.randomize());
       finish_item(seq);
