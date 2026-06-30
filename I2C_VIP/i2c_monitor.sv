@@ -4,6 +4,7 @@ class i2c_monitor extends uvm_monitor;
 
   `uvm_component_utils(i2c_monitor)
   uvm_analysis_port#(seq_item) mon_ap;
+  seq_item seq;
   
   virtual i2c_inf mon_vif;
   function new(string name = "i2c_monitor" , uvm_component parent);
@@ -15,6 +16,7 @@ class i2c_monitor extends uvm_monitor;
     if(!(`uvm_config_db#(virtual i2c_inf)::get(this,"","vif",mon_vif)))
       `uvm_error("MONITOR","interface not get",UVM_HIGH)
       mon_ap=new("mon_ap",this); //analysis port object creation
+    seq=seq_item::type_id::create("seq");
   endfunction
 
   //start detection 
@@ -30,8 +32,12 @@ class i2c_monitor extends uvm_monitor;
       @(posedge `MON_VIF.scl);
       temp_addr[i]=`MON_VIF.sda;
   end
+  seq.slv_addr=temp_addr;
   
   //1 bit R/W
+  @(posedge `MON_VIF.scl);
+  seq.rd_wr=`MON_VIF.sda;
+  
   //1 bit ACK
   //collecting 8bit internal address 
   //1 bit ACK
