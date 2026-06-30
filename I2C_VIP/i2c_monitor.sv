@@ -1,9 +1,9 @@
 // collects the data passively and give the data to the scoreboard and subscriber through analysis port
-`define MON_VIF mon_vif.d
+`define MON_VIF mon_vif.driver
 class i2c_monitor extends uvm_monitor;
 
   `uvm_component_utils(i2c_monitor)
-  uvm_analysis_port#(i2c_seq_item) mon_ap;
+  uvm_analysis_port#(seq_item) mon_ap;
   
   virtual i2c_inf mon_vif;
   function new(string name = "i2c_monitor" , uvm_component parent);
@@ -25,11 +25,10 @@ class i2c_monitor extends uvm_monitor;
   end
   
   //collecting 7bit address
-  reg [7:0] temp_addr;
+  reg [6:0] temp_addr;
     for(int i=6;i>=0;i--)begin
       @(posedge `MON_VIF.scl);
       temp_addr[i]=`MON_VIF.sda;
-  end
   end
   
   //1 bit R/W
