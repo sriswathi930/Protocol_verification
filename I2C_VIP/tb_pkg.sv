@@ -1,0 +1,19 @@
+`include "i2c_seq_item.sv"
+`include "i2c_seq.sv"
+/*`include "seq_full_rw.sv"
+`include "seq_7bit.sv"
+`include "seq_10bit.sv"
+`include "seq_rpt_start.sv"
+`include "seq_mismatch.sv"
+`include "seq_data_override.sv"
+`include "seq_directed.sv"
+`include "stuck.sv"*/
+
+`include "i2c_sequencer.sv"
+`include "i2c_driver.sv"
+`include "i2c_monitor.sv"
+`include "i2c_agent.sv"
+/*`include "scoreboard.sv"
+`include "coverage.sv"*/
+`include "i2c_environment.sv"
+`include "i2c_test.sv"
