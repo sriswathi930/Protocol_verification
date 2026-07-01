@@ -76,72 +76,55 @@ virtual task run_phase(uvm_phase phase);
       seq_item_port.item_done();
     end
   endtask
-
-
-  // Drive 1 byte (MSB first, protocol correct)
+// Drive 1 byte (MSB first, protocol correct)
   task drive_byte(logic [7:0] dr);
     for (int i = 0; i < 8; i++) begin
-      @(negedge vif.d.scl); 
-      vif.d.sda = dr[7];
-      @(posedge vif.d.scl); // hold during HIGH
+      @(negedge `drv_vif.scl); 
+      `drv_vif.sda = dr[7];
+      @(posedge `drv_vif.scl); // hold during HIGH
           dr = dr << 1;
     end
-
-    // Release SDA for ACK
-    @(negedge vif.d.scl);
-    vif.d.sda = 1'bz;
+ // Release SDA for ACK
+    @(negedge `drv_vif.scl);
+    `drv_vif.sda = 1'bz;
   endtask
-
-
-  // ✅ Read 1 byte from slave (NEW ✅)
+// Read 1 byte from slave
   task read_byte(output logic [7:0] data);
     data = 0;
-
-    @(negedge vif.d.scl);
-    vif.d.sda = 1'bz; // release line for slave
-
+    @(negedge `drv_vif.scl);
+    `drv_vif.sda = 1'bz; // release line for slave
     for (int i = 0; i < 8; i++) begin
-      @(posedge vif.d.scl);
-      data = {data[6:0], vif.d.sda}; // sample
+      @(posedge `drv_vif.scl);
+      data = {data[6:0], `drv_vif.sda}; // sample
     end
   endtask
-
 
   // Get ACK from slave
   task get_ack(output logic ack);
     @(negedge `drv_vif.scl); 
     `drv_vif.sda = 1'bz;
-
-    @(posedge vif.d.scl); 
-    ack = vif.d.sda;
+    @(posedge `drv_vif.scl); 
+    ack = `drv_vif.sda;
   endtask
 
-
-  // ✅ Master sends ACK/NACK
+  // Master sends ACK/NACK
   task put_ack();
-    @(negedge vif.d.scl); 
-    vif.d.sda = req.m_ack; // 0 = ACK, 1 = NACK
-
-    @(posedge vif.d.scl);
-    
-    @(negedge vif.d.scl);
-    vif.d.sda = 1'bz; // release again
+    @(negedge `drv_vif.scl); 
+    `drv_vif.sda = req.m_ack; // 0 = ACK, 1 = NACK
+    @(posedge `drv_vif.scl);
+    @(negedge `drv_vif.scl);
+    `drv_vif.sda = 1'bz; // release again
   endtask
-
-
-  // ✅ STOP condition
+// STOP condition
   task generate_stop();
-    @(negedge vif.d.scl); vif.d.sda = 0;
-    @(posedge vif.d.scl); #1 vif.d.sda = 1;
+    @(negedge `drv_vif.scl); `drv_vif.sda = 0;
+    @(posedge `drv_vif.scl); #1 `drv_vif.sda = 1;
   endtask
-
-
-  // ✅ REPEATED START condition (FIXED ✅)
+// REPEATED START condition (FIXED)
   task generate_restart();
-    @(posedge vif.d.scl);
-    vif.d.sda = 1;
-    #1 vif.d.sda = 0;
+    @(posedge `drv_vif.scl);
+    `drv_vif.sda = 1;
+    #1 `drv_vif.sda = 0;
   endtask
-
 endclass
 
