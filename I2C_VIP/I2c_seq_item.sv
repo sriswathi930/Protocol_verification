@@ -70,6 +70,6 @@ class seq_item extends uvm_sequence_item;
  function new(string name = "seq_item");  
    super.new(name);  
  endfunction  
-Endclass 
+endclass 
 
  
