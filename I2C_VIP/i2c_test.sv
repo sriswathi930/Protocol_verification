@@ -1,5 +1,5 @@
 class i2c_test extends uvm_test;
-  `uvm_component(i2c_test)
+  `uvm_component_utils(i2c_test)
 i2c_env env;
   
   function new(string name = "i2c_test" , uvm_component parent);
@@ -12,14 +12,15 @@ i2c_env env;
   endfunction
 
   task run_phase(uvm_phase phase);
+    i2c_seq seq;
     super.run_phase(phase);
-    seq_item seq;
-    seq=seq_item::type_id::create("seq");
     
     phase.raise_objection(this);
+    seq=i2c_seq::type_id::create("seq");
     seq.start(env.agent.seqr);
-    phase.drop_objection(this);
     #100;
+    phase.drop_objection(this);
+    
 
   endtask
 endclass
