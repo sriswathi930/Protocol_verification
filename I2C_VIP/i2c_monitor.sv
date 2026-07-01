@@ -13,7 +13,7 @@ class i2c_monitor extends uvm_monitor;
 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    if(!(`uvm_config_db#(virtual i2c_inf)::get(this,"","vif",mon_vif)))begin
+    if(!uvm_config_db#(virtual i2c_inf)::get(this,"","vif",mon_vif))begin
       `uvm_fatal("MONITOR","interface not get")
     end
       mon_ap=new("mon_ap",this); //analysis port object creation
@@ -22,12 +22,12 @@ class i2c_monitor extends uvm_monitor;
 
   task mon_run();
     
-    seq=seq_item::type_id::create("seq");
     bit [6:0] temp_addr; //to collect the address
     bit [7:0] iaddr_q; //to collect internal address
     bit [7:0] data_q; //data capturing
     bit nack; //to track early exit
     nack=0;
+     seq=seq_item::type_id::create("seq");
   //start detection 
   forever begin
     @(negedge `MON_VIF.sda);
