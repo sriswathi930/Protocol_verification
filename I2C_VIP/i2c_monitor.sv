@@ -13,7 +13,7 @@ class i2c_monitor extends uvm_monitor;
 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    if(!uvm_config_db#(virtual i2c_inf)::get(this,"","vif",mon_vif))begin
+    if(!uvm_config_db#(virtual i2c_inf)::get(this,"","mon_vif",mon_vif))begin
       `uvm_fatal("MONITOR","interface not get")
     end
       mon_ap=new("mon_ap",this); //analysis port object creation
