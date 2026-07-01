@@ -26,7 +26,8 @@ class i2c_monitor extends uvm_monitor;
     bit [6:0] temp_addr; //to collect the address
     bit [7:0] iaddr_q; //to collect internal address
     bit [7:0] data_q; //data capturing
-    bit nack=0; //to track early exit
+    bit nack; //to track early exit
+    nack=0;
   //start detection 
   forever begin
     @(negedge `MON_VIF.sda);
