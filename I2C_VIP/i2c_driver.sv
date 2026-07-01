@@ -1,6 +1,7 @@
 `define drv_vif intf.driver
 class i2c_driver extends uvm_driver #(seq_item);
   `uvm_component_utils(i2c_driver)
+
   
   function new(string name="i2c_driver", uvm_component parent=null);
     super.new(name,parent);
